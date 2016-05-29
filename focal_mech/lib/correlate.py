@@ -4,7 +4,7 @@ from numpy import (pi, rad2deg, inner, array, zeros, mgrid,
 from scipy.linalg import norm
 from scipy.optimize import minimize
 
-from focal_mech.lib.sph_harm import Wigner_d2
+from focal_mech.lib.sph_harm import WignerD2
 
 
 def _corr_shear(x, alm):
@@ -16,7 +16,7 @@ def _corr_shear(x, alm):
     
     strike, dip, rake = x
     # Wigner is ZYZ Euler rotation, \gamma = -rake
-    D = Wigner_d2(strike, dip, -rake).conjugate()
+    D = WignerD2(strike, dip, -rake).conjugate()
     # Template Spectrum : (0, -1j, 0, -1j, 0)
     prop = (inner(D[:,3], alm) + inner(D[:,1], alm))*-1j
     # Maximize, not minimize.
@@ -24,7 +24,7 @@ def _corr_shear(x, alm):
 
 def _scan_shear(alm):
      """
-    :param: 
+    :param alm: Quadrupole components. 
 
     Scans for the best starting point, the optimization
     can get stuck otherwise.
@@ -40,7 +40,7 @@ def _scan_shear(alm):
     
 def corr_shear(Alm):
     """
-    :param: 
+    :param Alm: the spectrum of the classifier function. 
 
     Scans for the best starting point, the optimization
     can get stuck otherwise.
