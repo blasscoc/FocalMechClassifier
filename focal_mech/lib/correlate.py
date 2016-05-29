@@ -23,7 +23,7 @@ def _corr_shear(x, alm):
     return -norm(prop)
 
 def _scan_shear(alm):
-     """
+    """
     :param alm: Quadrupole components. 
 
     Scans for the best starting point, the optimization
@@ -33,9 +33,11 @@ def _scan_shear(alm):
     # scan for a good starting point
     X, Y, Z = mgrid[0:2*pi:10j, 0:pi:10j, 0:2*pi:10j]
     x0s = zip(X.ravel(),Y.ravel(),Z.ravel())
-    res = [_corr_dc(x0, Alm[4:]) for x0 in x0s]
-    x0 = res[argmin(res)]
+    res = [_corr_shear(x0, alm) for x0 in x0s]
+    x0 = x0s[argmin(res)]
 
+    print x0
+    
     return x0
     
 def corr_shear(Alm):
@@ -49,11 +51,12 @@ def corr_shear(Alm):
     # correlation with iso, dipole is zero.
     alm = array([Alm[2,-2], Alm[2,-1],
                  Alm[2,0],
-                 Alm[2,1],Alm[2,2]])    
+                 Alm[2,1],Alm[2,2]])
+    
     # pick a good starting point.
     x0 = _scan_shear(alm)
 
-    f = lambda x : _corr_dc(x,alm)
+    f = lambda x : _corr_shear(x,alm)
     results = minimize(f, x0=x0,
                     bounds=((0,2*pi), (0,pi), (0,2*pi)))
 
