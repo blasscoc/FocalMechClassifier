@@ -8,7 +8,6 @@ setup(name = "focal_mech",
       packages=['focal_mech'],
       install_requires = ['numpy', 'scipy', 'matplotlib',
                           'mplstereonet',
-                          'obspy'
-                          'scikits-learn'])
+                          'obspy'])
 
 
