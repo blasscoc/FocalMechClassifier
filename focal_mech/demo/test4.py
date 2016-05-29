@@ -1,17 +1,18 @@
-from numpy import array, rad2deg, logical_and, rad2deg, pi, mgrid, argmin
+from numpy import array, rad2deg, pi, mgrid, argmin
 
-from matplotlib.pylab import contour
 import matplotlib.pyplot as plt
 import mplstereonet
 
 from obspy.imaging.beachball import aux_plane
+
 
 from focal_mech.lib.classify_mechanism import classify, translate_to_sphharm
 from focal_mech.io.read_hash import read_demo, read_hash_solutions
 
 from focal_mech.util.hash_routines import hash_to_classifier
 from focal_mech.lib.sph_harm import get_sph_harm
-from focal_mech.lib.correlate import corr_dc, _corr_dc
+from focal_mech.lib.correlate import corr_shear
+
 
 event = 3145744
 
@@ -41,14 +42,8 @@ coeffs_nr = array([Alm_nr[0,0],
                 Alm_nr[1,-1], Alm_nr[1,0], Alm_nr[1,1], 
                 Alm_nr[2,-2], Alm_nr[2,-1], Alm_nr[2,0], Alm_nr[2,1], Alm_nr[2,2]])
 
-
-X, Y, Z = mgrid[0:2*pi:10j, 0:pi:10j, 0:2*pi:10j]
-x0s = zip(X.ravel(),Y.ravel(),Z.ravel())
-res = [_corr_dc(x0,coeffs[4:]) for x0 in x0s]
-svm_soln, f = corr_dc(Alm, x0=x0s[argmin(res)])
-
-res = [_corr_dc(x0,coeffs_nr[4:]) for x0 in x0s]
-svm_soln_nr, f = corr_dc(Alm_nr, x0=x0s[argmin(res)])
+svm_soln, f = corr_shear(Alm)
+svm_soln_nr, f = corr_shear(Alm_nr)
 
 
 resolution = (200,400)

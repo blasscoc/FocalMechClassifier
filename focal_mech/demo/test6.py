@@ -1,4 +1,4 @@
-from numpy import array, rad2deg, logical_and, rad2deg, pi, mgrid, argmin
+from numpy import array, rad2deg, pi, mgrid, argmin
 
 from matplotlib.pylab import contour
 import matplotlib.pyplot as plt
@@ -11,7 +11,7 @@ from focal_mech.io.read_hash import read_demo, read_hash_solutions
 
 from focal_mech.util.hash_routines import hash_to_classifier
 from focal_mech.lib.sph_harm import get_sph_harm
-from focal_mech.lib.correlate import corr_dc, _corr_dc
+from focal_mech.lib.correlate import corr_shear
 
 hash_solns = read_hash_solutions("example1.out")
 
@@ -28,10 +28,8 @@ coeffs = array([Alm[0,0],
                 Alm[1,-1], Alm[1,0], Alm[1,1], 
                 Alm[2,-2], Alm[2,-1], Alm[2,0], Alm[2,1], Alm[2,2]])
 
-X, Y, Z = mgrid[0:2*pi:10j, 0:pi:10j, 0:2*pi:10j]
-x0s = zip(X.ravel(),Y.ravel(),Z.ravel())
-res = [_corr_dc(x0,coeffs[4:]) for x0 in x0s]
-svm_soln, f = corr_dc(Alm, x0=x0s[argmin(res)])
+
+svm_soln, f = corr_shear(Alm)
 
 resolution = (200,400)
 longi, lati, Z = get_sph_harm(resolution=resolution)
@@ -61,10 +59,7 @@ coeffs = array([Alm[0,0],
                 Alm[1,-1], Alm[1,0], Alm[1,1], 
                 Alm[2,-2], Alm[2,-1], Alm[2,0], Alm[2,1], Alm[2,2]])
 
-X, Y, Z = mgrid[0:2*pi:10j, 0:pi:10j, 0:2*pi:10j]
-x0s = zip(X.ravel(),Y.ravel(),Z.ravel())
-res = [_corr_dc(x0,coeffs[4:]) for x0 in x0s]
-svm_soln2, f = corr_dc(Alm, x0=x0s[argmin(res)])
+svm_soln2, f = corr_shear(Alm)
 
 resolution = (200,400)
 longi, lati, Z = get_sph_harm(resolution=resolution)
@@ -94,10 +89,7 @@ coeffs = array([Alm[0,0],
                 Alm[1,-1], Alm[1,0], Alm[1,1], 
                 Alm[2,-2], Alm[2,-1], Alm[2,0], Alm[2,1], Alm[2,2]])
 
-X, Y, Z = mgrid[0:2*pi:10j, 0:pi:10j, 0:2*pi:10j]
-x0s = zip(X.ravel(),Y.ravel(),Z.ravel())
-res = [_corr_dc(x0,coeffs[4:]) for x0 in x0s]
-svm_soln3, f = corr_dc(Alm, x0=x0s[argmin(res)])
+svm_soln3, f = corr_shear(Alm)
 
 resolution = (200,400)
 longi, lati, Z = get_sph_harm(resolution=resolution)
@@ -145,7 +137,6 @@ for a, t, p in zip(azi, toa, polarity):
     else:
         ax.pole(a, t,'o', markeredgecolor='blue', markerfacecolor='white')
 
-#fig.suptitle("Event %d" % event)
 ax.grid()
 
 
@@ -176,7 +167,6 @@ for a, t, p in zip(azi, toa, polarity):
     else:
         ax.pole(a, t,'o', markeredgecolor='blue', markerfacecolor='white')
 
-#fig.suptitle("Event %d" % event2)
 ax.grid()
 
 
@@ -207,7 +197,6 @@ for a, t, p in zip(azi, toa, polarity):
     else:
         ax.pole(a, t,'o', markeredgecolor='blue', markerfacecolor='white')
 
-#fig.suptitle("Event %d" % event2)
 ax.grid()
 
 

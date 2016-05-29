@@ -1,22 +1,14 @@
-from numpy import array, rad2deg, logical_and, rad2deg, pi, mgrid, argmin, arange, argmax, deg2rad, dot
+from numpy import array, argmin, arange, argmax, deg2rad, dot
 from scipy.linalg import norm
 
-from matplotlib import ticker
-from matplotlib.pylab import contour
 import matplotlib.pyplot as plt
-
 import mplstereonet
 
-from obspy.imaging.beachball import aux_plane
-
+from focal_mech.lib.sph_harm import WignerD2
 from focal_mech.lib.classify_mechanism import classify, translate_to_sphharm
 from focal_mech.io.read_hash import read_demo, read_hash_solutions
-
 from focal_mech.util.hash_routines import hash_to_classifier
-from focal_mech.lib.sph_harm import get_sph_harm
-from focal_mech.lib.correlate import corr_dc, _corr_dc
 
-from focal_mech.lib.sph_harm import get_sph_harm, Wigner_d2
 
 hash_solns = read_hash_solutions("example1.out")
 
@@ -55,7 +47,7 @@ blm = array([Alm[0,0],
              Alm[1,-1], Alm[1,0], Alm[1,1], 
              Alm[2,-2], Alm[2,-1], Alm[2,0], Alm[2,1], Alm[2,2]])
                 
-D = Wigner_d2(deg2rad(90), deg2rad(0), deg2rad(0) )
+D = WignerD2(deg2rad(90), deg2rad(0), deg2rad(0) )
 blm[4:] = dot(D, blm[4:]) 
 
 # rotate event by 90-degreees

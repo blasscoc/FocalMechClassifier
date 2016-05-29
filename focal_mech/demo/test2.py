@@ -1,4 +1,4 @@
-from numpy import array, rad2deg, logical_and, rad2deg, pi, mgrid, argmin, deg2rad, dot
+from numpy import array, rad2deg
 
 from matplotlib.pylab import contour
 import matplotlib.pyplot as plt
@@ -11,9 +11,7 @@ from focal_mech.io.read_hash import read_demo, read_hash_solutions
 
 from focal_mech.util.hash_routines import hash_to_classifier
 from focal_mech.lib.sph_harm import get_sph_harm
-from focal_mech.lib.correlate import corr_dc, _corr_dc
-
-from focal_mech.lib.sph_harm import get_sph_harm, Wigner_d2
+from focal_mech.lib.correlate import corr_shear
 
 
 hash_solns = read_hash_solutions("example1.out")
@@ -22,8 +20,7 @@ hash_solns = read_hash_solutions("example1.out")
 polarity_data = read_demo("north1.phase", "scsn.reverse", reverse=True)
 inputs = hash_to_classifier(polarity_data, parity=1)
 
-event = 3153955
-
+event = 3146815
 
 result = classify(*inputs[event], kernel_degree=2)
 Alm = translate_to_sphharm(*result, kernel_degree=2)
@@ -33,11 +30,7 @@ coeffs = array([Alm[0,0],
                 Alm[1,-1], Alm[1,0], Alm[1,1], 
                 Alm[2,-2], Alm[2,-1], Alm[2,0], Alm[2,1], Alm[2,2]])
 
-
-X, Y, Z = mgrid[0:2*pi:10j, 0:pi:10j, 0:2*pi:10j]
-x0s = zip(X.ravel(),Y.ravel(),Z.ravel())
-res = [_corr_dc(x0,coeffs[4:]) for x0 in x0s]
-svm_soln, f = corr_dc(Alm, x0=x0s[argmin(res)])
+svm_soln, f = corr_shear(Alm)
 
 resolution = (200,400)
 longi, lati, Z = get_sph_harm(resolution=resolution)
@@ -92,7 +85,6 @@ toa = rad2deg(polarity_data[event][:,1])
 #toa[indx] = 90 - toa[indx]
 #indx = logical_and(toa >= 90, toa < 180)
 #toa[indx] = 270 - toa[indx]
-
 
 polarity = polarity_data[event][:,2]
 for a, t, p in zip(azi, toa, polarity):
