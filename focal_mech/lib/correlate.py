@@ -17,8 +17,8 @@ def _corr_shear(x, alm):
     strike, dip, rake = x
     # Wigner is ZYZ Euler rotation, \gamma = -rake
     D = WignerD2(strike, dip, -rake).conjugate()
-    # Template Spectrum : (0, -1j, 0, -1j, 0)
-    prop = (inner(D[:,3], alm) + inner(D[:,1], alm))*-1j
+    # Template Spectrum : glm = (0, -1j, 0, -1j, 0)
+    prop = (inner(D[:,3], alm) + inner(D[:,1], alm))
     # Maximize, not minimize.
     return -norm(prop)
 
