@@ -22,4 +22,9 @@ parameters. And also data derived from them,  3146815_realizations.out,
 example1.out and example1-noreverse.out. You can regenerate these using
 the inputs provided.
 
+If you get "LookupError: unknown encoding: " errors from ObsPy, set these environment variables:
 
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+This seemed to effect OSX: El Capitan.
