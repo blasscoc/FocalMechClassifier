@@ -25,6 +25,7 @@ the inputs provided.
 If you get "LookupError: unknown encoding: " errors from ObsPy, set these environment variables:
 
 export LC_ALL=en_US.UTF-8
+
 export LANG=en_US.UTF-8
 
 This seemed to effect OSX: El Capitan.
